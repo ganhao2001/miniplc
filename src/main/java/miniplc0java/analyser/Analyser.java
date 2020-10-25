@@ -424,16 +424,16 @@ public final class Analyser {
 
         if (check(TokenType.Ident)) {
             // 是标识符
-
+            var nameToken= expect(TokenType.Ident);
             // 加载标识符的值
-            String name = /* 快填 */ (String) expect(TokenType.Ident).getValue();
+            String name = /* 快填 */ (String) nameToken.getValue();
             var symbol = symbolTable.get(name);
             if (symbol == null) {
                 // 没有这个标识符
-                throw new AnalyzeError(ErrorCode.NotDeclared, /* 当前位置 */ null);
+                throw new AnalyzeError(ErrorCode.NotDeclared, /* 当前位置 */ nameToken.getStartPos());
             } else if (!symbol.isInitialized) {
                 // 标识符没初始化
-                throw new AnalyzeError(ErrorCode.NotInitialized, /* 当前位置 */ null);
+                throw new AnalyzeError(ErrorCode.NotInitialized, /* 当前位置 */ nameToken.getStartPos());
             }
             var offset = getOffset(name, null);
             instructions.add(new Instruction(Operation.LOD, offset));
